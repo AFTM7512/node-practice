@@ -19,7 +19,9 @@ function getDirList(path, options) {
   if (files && typeof options === 'string') {
     return files.filter(item => extname(item) && extname(item).substring(1) === options)
   } else if (files && typeof options === 'object' && options.recursion) {
-    return recursionDir(path)
+    const recursionFiles = recursionDir(path)
+    if (options.extname) return recursionFiles.filter(item => extname(item) && extname(item).substring(1) === options.extname)
+    return recursionFiles
   } else if (files && typeof options === 'object') {
     return files.filter(item => extname(item) && extname(item).substring(1) === options.extname)
   } else {
@@ -27,6 +29,7 @@ function getDirList(path, options) {
   }
 }
 
+// 递归检索目录下的所有文件名
 function recursionDir(path) {
   const files = readdirSync(path)
   const result = []
